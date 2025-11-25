@@ -1,0 +1,43 @@
+/*Задача 6: Лабиринт и P.Diddy
+P.Diddy заблудился в лабиринте и хочет выбраться на улицу. 
+Однако он, как известно, большой фанат pdf-файлов и не может пройти мимо ни одного такого! 
+В лабиринте есть отметки о таких файлах, и P.Diddy должен собрать их как можно больше.
+
+Входные данные: 
+Размеры лабиринта (N x M). Лабиринт, где 0 — пустая клетка, 1 — стена, P — pdf-файл, E — выход.
+
+Выходные данные: 
+Максимальное количество pdf-файлов, которое сможет собрать P.Diddy на пути к выходу.*/
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int n, m, ans = 0;
+vector<vector<int>> a;
+vector<vector<bool>> used;
+
+void dfs(int x, int y, int cnt){
+    if(a[x][y] == 3){    // нашли выход
+        ans = max(ans, cnt);
+        return;
+    }
+    used[x][y] = 1;
+    int dx[2] = {1,0}, dy[2]={0,1}; // ходим только вниз/вправо
+
+    for(int k=0;k<2;k++){
+        int nx=x+dx[k], ny=y+dy[k];
+        if(nx<n && ny<m && a[nx][ny]!=1 && !used[nx][ny]){
+            dfs(nx,ny, cnt + (a[nx][ny]==2));
+        }
+    }
+    used[x][y] = 0;
+}
+
+int main(){
+    cin >> n >> m;
+    a.assign(n, vector<int>(m));
+    used.assign(n, vector<bool>(m, 0));
+    for(auto &r:a) for(int &x:r) cin>>x;
+    dfs(0,0,0);
+    cout << ans;
+}
