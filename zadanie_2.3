@@ -1,0 +1,19 @@
+/*Задача 3: Размен монет
+Реализуйте алгоритм для нахождения минимального количества монет для сдачи, используя заданные номиналы.*/
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    vector<int> coins = { 1, 2, 5 };
+    int amount = 11;
+
+    vector<int> dp(amount + 1, 1e9);
+    dp[0] = 0;
+
+    for (int c : coins)
+        for (int i = c; i <= amount; i++)
+            dp[i] = min(dp[i], dp[i - c] + 1);
+
+    cout << dp[amount];
+}
