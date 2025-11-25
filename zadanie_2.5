@@ -1,0 +1,18 @@
+/*Задача 5: Максимальная сумма подмассива
+Реализуйте программу, которая находит максимальную сумму подмассива в массиве целых чисел.*/
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    vector<int> a;
+    int x;
+    while(cin >> x) a.push_back(x);
+
+    int best = a[0], cur = a[0];
+    for(int i = 1; i < a.size(); i++){
+        cur = max(a[i], cur + a[i]);
+        best = max(best, cur);
+    }
+    cout << best;
+}
