@@ -1,0 +1,54 @@
+/*Задача 3. Next token
+Вам надо написать функцию NextToken для выделения очередного токена в строке. 
+Токеном считается последовательность символов до указанного символа-разделителя (или до конца строки).
+
+Использоваться функция будет примерно так:
+
+int main() {
+    std::string_view sv = "Hello world and good bye";
+
+    const char delimiter = ' ';
+    std::string_view token;
+
+    // Делим строку на токены по разделителю и перебираем эти токены:
+    while (NextToken(sv, delimiter, token)) {
+        // обрабатываем очередной token
+        // например, печатаем его на экране:
+        std::cout << token << "\n";
+    }
+}
+Результатом выполнения такой программы будет:
+
+Hello
+world
+and
+good
+bye
+Сдайте только код функции NextToken и подключите необходимые библиотеки. 
+Ваша функция будет скомпилирована с нашей функцией main. 
+Гарантируется, что входная строка не заканчивается на разделитель. 
+Догадайтесь сами, какие аргументы должна принимать функция NextToken. 
+Эта функция может менять первый аргумент (sv).*/
+
+
+#include <string_view>
+
+// Возвращает true и устанавливает token как следующий токен (не включая delimiter).
+// Меняет входной sv так, что он сдвигается за найденный токен и возможный разделитель.
+// Если sv пуст, возвращает false.
+bool NextToken(std::string_view& sv, char delimiter, std::string_view& token) {
+    if (sv.empty()) return false;
+
+    size_t pos = sv.find(delimiter);
+    if (pos == std::string_view::npos) {
+        // delimiter не найден — весь sv является последним токеном
+        token = sv;
+        sv = sv.substr(sv.size()); // делаем sv пустым
+        return true;
+    }
+    else {
+        token = sv.substr(0, pos);
+        sv = sv.substr(pos + 1); // убираем токен и сам delimiter
+        return true;
+    }
+}
