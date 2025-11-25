@@ -1,0 +1,56 @@
+/*Задача 2. Самые частые слова
+Выведите k самых частотных слов текста и их частоты.
+
+Формат ввода:
+
+В первой строке указано натуральное число k, не превосходящее 1000.
+Далее идут строки текста объёмом до 1 Mб. 
+Слова в тексте разделены пробелами или переводами строк. 
+Различать регистр и обрабатывать пунктуацию не нужно.
+
+Формат вывода:
+
+В выводе должно быть не более k самых частотных слов текста. 
+Через табуляцию после слова напечатайте его частоту. 
+Слова должны быть упрядочены по убыванию частоты, а при равенстве частот — по алфавиту.*/
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int k;
+    if (!(cin >> k)) return 0; // если нет k — выходим
+
+    unordered_map<string, int> freq;
+    string word;
+
+    // Считываем все слова до EOF. >> разделяет по любому whitespace.
+    while (cin >> word) {
+        // приводим к нижнему регистру, т.к. "Различать регистр не нужно"
+        for (char &ch : word) ch = static_cast<char>(tolower(static_cast<unsigned char>(ch)));
+        ++freq[word];
+    }
+
+    // Переносим в вектор для сортировки
+    vector<pair<string,int>> vec;
+    vec.reserve(freq.size());
+    for (auto &p : freq) vec.emplace_back(p.first, p.second);
+
+    // сортируем: по убыванию частоты, при равенстве — по алфавиту (возрастающему)
+    sort(vec.begin(), vec.end(), [](const pair<string,int>& a, const pair<string,int>& b) {
+        if (a.second != b.second) return a.second > b.second; // чаще раньше
+        return a.first < b.first; // при равной частоте — лексикографически
+    });
+
+    // выводим не более k строк
+    int limit = min(static_cast<int>(vec.size()), k);
+    for (int i = 0; i < limit; ++i) {
+        cout << vec[i].first << '\t' << vec[i].second << '\n';
+    }
+
+    return 0;
+}
